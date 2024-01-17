@@ -9,10 +9,12 @@ using UnityEngine;
 using UnityEngine.Timeline;
 using UnityEngine.UIElements;
 
-public class playerController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public int frame_rate;
     public float mouse_sens;
+    public enum crouchModes {TOGGLE, HOLD};
+    public crouchModes crouch_mode = crouchModes.TOGGLE;
 
     public float movement_speed; // 800
     public float default_drag; // 3
@@ -72,12 +74,6 @@ public class playerController : MonoBehaviour
 
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f + default_player_scale.y/2, 0) + transform.forward * .1f, default_player_scale.y / 2);
-        Gizmos.DrawSphere(transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f, 0) - transform.forward * .35f, 0.05f);
-    }
-
     void updateXYInput()
     {
         hor_inp = Input.GetAxisRaw("Horizontal");
@@ -106,7 +102,8 @@ public class playerController : MonoBehaviour
                         default_player_scale.y / 2));
         }
         // if player isn't crouching, check if there is any headroom at all above player
-        else {
+        else
+        {
             has_headroom = (!Physics.CheckCapsule(
                             transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f, 0) + transform.forward * .35f,
                             transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f, 0) - transform.forward * .35f,
@@ -116,13 +113,14 @@ public class playerController : MonoBehaviour
                             transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f, 0) - transform.right * .35f,
                             0.05f));
         }
-        
+
         // if velocity is any magnitude greater than 0, moving is true
         if (rb.velocity.magnitude > 0.1f)
         {
             moving = true;
         }
-        else {
+        else
+        {
             moving = false;
         }
 
@@ -134,22 +132,30 @@ public class playerController : MonoBehaviour
         {
             cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(cam.GetComponent<Camera>().fieldOfView, sprinting_cam_fov, 0.05f);
         }
-        else {
+        else
+        {
             cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(cam.GetComponent<Camera>().fieldOfView, default_cam_fov, 0.05f);
         }
 
         // set crouch toggle
-        if (Input.GetKeyDown(KeyCode.LeftControl) && !crouch_toggle)
-        {
-           crouch_toggle = true;
+
+        if (crouch_mode == crouchModes.TOGGLE) {
+            if (Input.GetKeyDown(KeyCode.LeftControl) && !crouch_toggle)
+            {
+                crouch_toggle = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftControl) && crouch_toggle)
+            {
+                crouch_toggle = false;
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.LeftControl) && crouch_toggle)
-        {
-            crouch_toggle = false;
+        else if (crouch_mode == crouchModes.HOLD) {
+            crouch_toggle = Input.GetKey(KeyCode.LeftControl);
         }
-        
+
         // if left shift is just now pressed in order to sprint, disable crouch
-        if (Input.GetKeyDown(KeyCode.LeftShift)) { 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
             crouch_toggle = false;
         }
 
@@ -166,9 +172,9 @@ public class playerController : MonoBehaviour
             crouching = false;
         }
 
-        
 
-        
+
+
 
     }
 
@@ -176,7 +182,8 @@ public class playerController : MonoBehaviour
     {
         crouching = true;
         // "source engine"-type jump
-        if (!grounded) {
+        if (!grounded)
+        {
             transform.position += Vector3.up * 0.2f;
         }
         // crouching
@@ -236,9 +243,9 @@ public class playerController : MonoBehaviour
             rb.drag = 0;
             vector *= jump_modifier;
         }
-        
+
         // DBUG display speed 
-        // Debug.Log("V: " + vector + " || " + vector.magnitude);
+        Debug.Log("V: " + rb.velocity + " || " + rb.velocity.magnitude);
         rb.AddForce(vector, ForceMode.Force);
 
 
@@ -251,5 +258,4 @@ public class playerController : MonoBehaviour
         cam.transform.Rotate(new Vector3(-ver_curs_inp * mouse_sens, 0, 0), Space.Self);
     }
 
-    }
 }
