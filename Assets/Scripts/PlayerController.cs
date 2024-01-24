@@ -85,14 +85,18 @@ public class PlayerController : MonoBehaviour
     void updatePlayerStates()
     {
         // if there is collision below player, grounded is true
-        grounded = (Physics.CheckCapsule(
+
+        // old capsule-based grounded collision check
+       /* grounded = (Physics.CheckCapsule(
                         transform.position - new Vector3(0, collider.bounds.extents.y + 0.055f, 0) + transform.forward * .35f,
                         transform.position - new Vector3(0, collider.bounds.extents.y + 0.055f, 0) - transform.forward * .35f,
                         0.05f) ||
                     Physics.CheckCapsule(
                         transform.position - new Vector3(0, collider.bounds.extents.y + 0.055f, 0) + transform.right * .35f,
                         transform.position - new Vector3(0, collider.bounds.extents.y + 0.055f, 0) - transform.right * .35f,
-                        0.05f));
+                        0.05f));*/
+
+        grounded = Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f);
 
         // if player is crouching, check headroom for being able to uncrouch
         if (crouching)
@@ -245,7 +249,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // DBUG display speed 
-        Debug.Log("V: " + rb.velocity + " || " + rb.velocity.magnitude);
+        //Debug.Log("V: " + rb.velocity + " || " + rb.velocity.magnitude);
         rb.AddForce(vector, ForceMode.Force);
 
 
