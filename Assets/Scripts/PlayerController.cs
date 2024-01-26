@@ -86,16 +86,6 @@ public class PlayerController : MonoBehaviour
     {
         // if there is collision below player, grounded is true
 
-        // old capsule-based grounded collision check
-       /* grounded = (Physics.CheckCapsule(
-                        transform.position - new Vector3(0, collider.bounds.extents.y + 0.055f, 0) + transform.forward * .35f,
-                        transform.position - new Vector3(0, collider.bounds.extents.y + 0.055f, 0) - transform.forward * .35f,
-                        0.05f) ||
-                    Physics.CheckCapsule(
-                        transform.position - new Vector3(0, collider.bounds.extents.y + 0.055f, 0) + transform.right * .35f,
-                        transform.position - new Vector3(0, collider.bounds.extents.y + 0.055f, 0) - transform.right * .35f,
-                        0.05f));*/
-
         grounded = Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f);
 
         // if player is crouching, check headroom for being able to uncrouch
@@ -175,11 +165,6 @@ public class PlayerController : MonoBehaviour
         {
             crouching = false;
         }
-
-
-
-
-
     }
 
     IEnumerator crouch()
@@ -259,7 +244,45 @@ public class PlayerController : MonoBehaviour
         }
 
         gameObject.transform.Rotate(new Vector3(0, hor_curs_inp * mouse_sens, 0), Space.World);
-        cam.transform.Rotate(new Vector3(-ver_curs_inp * mouse_sens, 0, 0), Space.Self);
+        updateCamera();
+
     }
 
+    void updateCamera() {
+        Vector3 cameraRotation = new Vector3(
+                -ver_curs_inp * mouse_sens,
+                0,
+                0
+                );
+        cameraRotation = cam.transform.localEulerAngles + cameraRotation;
+        cameraRotation = new Vector3(
+            Mathf.Clamp(toNegativeDegrees(cameraRotation.x), -90, 90),
+            cameraRotation.y,
+            cameraRotation.z
+            );
+        cam.transform.localEulerAngles = cameraRotation;
+    }
+
+    // reused self-made code from Junior year project Super Michael Ball
+    // unity likes to use degrees in the range 0 to 360. this function will try and return a range of -180 to 180.
+    // there is a flaw in unity however that makes the x axis, and ONLY the x axis not cooperate past 90 degrees. it is very weird.
+    // if it MUST be fixed, then we can start storing the x axis rotation in this script rather than using requesting unitys.
+    float toNegativeDegrees(float degree)
+    {
+        degree /= 360;
+        if (degree > 0.5) { degree -= 1; }
+        degree *= 360;
+        return degree;
+    }
+
+    public bool isPlayerLooking(GameObject objectToLookAt) // returns true if the player is close enough to and is looking at the given object
+    {
+        RaycastHit hit; // if i'm close, & a raycast from the player hit the the object to look at, return true
+        if ((transform.position - objectToLookAt.transform.position).magnitude < 3 && Physics.Raycast(transform.GetChild(0).transform.position, transform.GetChild(0).transform.TransformDirection(Vector3.forward), out hit) && hit.transform == objectToLookAt.transform)
+        {
+            //Debug.Log(player.transform.GetChild(0).transform.TransformDirection(Vector3.forward));
+            return true;
+        }
+        return false;
+    }
 }
