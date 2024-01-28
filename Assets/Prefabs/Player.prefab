@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3478438648437053206}
   - component: {fileID: 3478438648437053228}
   - component: {fileID: 3478438648437053231}
+  - component: {fileID: 476630417}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -54,7 +55,7 @@ MeshRenderer:
   m_GameObject: {fileID: 3478438648437053207}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -94,7 +95,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3478438648437053207}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d4f9b3e6481c0e5458409df3447c9d4b, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
@@ -129,16 +130,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2e0e450137ff9d4fabd4786b30b7eff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frame_rate: 120
+  frame_rate: 0
   mouse_sens: 3
   crouch_mode: 0
   movement_speed: 800
-  default_drag: 3
+  default_drag: 5
   jump_force: 405
   sprint_modifier: 1.4
   jump_modifier: 0.07
   crouch_modifier: 0.5
   stamina: 100
+  hor_curs_inp: 0
+  ver_curs_inp: 0
+  can_move: 1
   grounded: 0
   has_headroom: 0
   moving: 0
@@ -146,6 +150,19 @@ MonoBehaviour:
   crouch_toggle: 0
   crouching: 0
   velocity: {x: 0, y: 0, z: 0}
+  cam: {fileID: 0}
+--- !u!114 &476630417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3478438648437053207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e5e571a6ed342d40b301921af6e2619, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3478438648700812924
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,15 +25,18 @@ public class PlayerController : MonoBehaviour
     public float jump_modifier; // 0.07
     public float crouch_modifier; //0.5
 
+
     public float stamina; // 100
+    public float reach; //3
 
     // input
     float hor_inp;
     float ver_inp;
-    float hor_curs_inp;
-    float ver_curs_inp;
+    public float hor_curs_inp;
+    public float ver_curs_inp;
 
     // player states
+    public bool can_move;
     public bool grounded;
     public bool has_headroom;
     public bool moving;
@@ -52,7 +55,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 velocity;
     Collider collider;
     Rigidbody rb;
-    GameObject cam;
+    public GameObject cam;
 
     // Start is called before the first frame update
     void Start()
@@ -70,16 +73,27 @@ public class PlayerController : MonoBehaviour
     {
         Application.targetFrameRate = frame_rate;
         updateXYInput();
-        calculateMovement();
+        if (can_move)
+        {
+            calculateMovement();
+        }
+        else {
+            rb.velocity = Vector3.zero;
+        }
 
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(cam.transform.position, cam.transform.position + cam.transform.forward * 3);
     }
 
     void updateXYInput()
     {
         hor_inp = Input.GetAxisRaw("Horizontal");
         ver_inp = Input.GetAxisRaw("Vertical");
-        hor_curs_inp = Input.GetAxisRaw("Mouse X");
-        ver_curs_inp = Input.GetAxisRaw("Mouse Y");
+        hor_curs_inp = Input.GetAxisRaw("Mouse X") * mouse_sens;
+        ver_curs_inp = Input.GetAxisRaw("Mouse Y") * mouse_sens;
     }
 
     void updatePlayerStates()
@@ -124,11 +138,11 @@ public class PlayerController : MonoBehaviour
         // if sprinting is true and player is moving, change camera fov
         if (sprinting && moving)
         {
-            cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(cam.GetComponent<Camera>().fieldOfView, sprinting_cam_fov, 0.05f);
+            cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(cam.GetComponent<Camera>().fieldOfView, sprinting_cam_fov, Time.deltaTime * 6.56f);
         }
         else
         {
-            cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(cam.GetComponent<Camera>().fieldOfView, default_cam_fov, 0.05f);
+            cam.GetComponent<Camera>().fieldOfView = Mathf.Lerp(cam.GetComponent<Camera>().fieldOfView, default_cam_fov, Time.deltaTime * 6.56f);
         }
 
         // set crouch toggle
@@ -178,8 +192,8 @@ public class PlayerController : MonoBehaviour
         // crouching
         while (crouching)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, crouching_player_scale, 0.05f);
-            cam.transform.localPosition = Vector3.Lerp(cam.transform.localPosition, crouching_cam_pos, 0.05f);
+            transform.localScale = Vector3.Lerp(transform.localScale, crouching_player_scale, Time.deltaTime * 6.56f);
+            cam.transform.localPosition = Vector3.Lerp(cam.transform.localPosition, crouching_cam_pos, Time.deltaTime * 6.56f);
             yield return null;
         }
 
@@ -191,8 +205,8 @@ public class PlayerController : MonoBehaviour
             {
                 yield break;
             }
-            transform.localScale = Vector3.Lerp(transform.localScale, default_player_scale, 0.05f);
-            cam.transform.localPosition = Vector3.Lerp(cam.transform.localPosition, default_cam_pos, 0.05f);
+            transform.localScale = Vector3.Lerp(transform.localScale, default_player_scale, Time.deltaTime * 6.56f);
+            cam.transform.localPosition = Vector3.Lerp(cam.transform.localPosition, default_cam_pos, Time.deltaTime * 6.56f);
             yield return null;
         }
 
@@ -235,7 +249,7 @@ public class PlayerController : MonoBehaviour
 
         // DBUG display speed 
         //Debug.Log("V: " + rb.velocity + " || " + rb.velocity.magnitude);
-        rb.AddForce(vector, ForceMode.Force);
+        rb.AddForce(vector * Time.deltaTime * 120, ForceMode.Force);
 
 
         if (Input.GetKeyDown(KeyCode.Space) && grounded && !crouching)
@@ -243,14 +257,14 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jump_force, ForceMode.Impulse);
         }
 
-        gameObject.transform.Rotate(new Vector3(0, hor_curs_inp * mouse_sens, 0), Space.World);
+        gameObject.transform.Rotate(new Vector3(0, hor_curs_inp, 0), Space.World);
         updateCamera();
 
     }
 
     void updateCamera() {
         Vector3 cameraRotation = new Vector3(
-                -ver_curs_inp * mouse_sens,
+                -ver_curs_inp,
                 0,
                 0
                 );
@@ -278,9 +292,28 @@ public class PlayerController : MonoBehaviour
     public bool isPlayerLooking(GameObject objectToLookAt) // returns true if the player is close enough to and is looking at the given object
     {
         RaycastHit hit; // if i'm close, & a raycast from the player hit the the object to look at, return true
-        if ((transform.position - objectToLookAt.transform.position).magnitude < 3 && Physics.Raycast(transform.GetChild(0).transform.position, transform.GetChild(0).transform.TransformDirection(Vector3.forward), out hit) && hit.transform == objectToLookAt.transform)
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit) && hit.transform == objectToLookAt.transform && hit.distance < reach)
         {
-            //Debug.Log(player.transform.GetChild(0).transform.TransformDirection(Vector3.forward));
+            return true;
+        }
+        return false;
+    }
+
+    public GameObject lookingAt() // returns true if the player is close enough to and is looking at the given object
+    {
+        RaycastHit hit; // if i'm close, & a raycast from the player hit the the object to look at, return true
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit) && hit.distance < reach)
+        {
+            return hit.transform.gameObject;
+        }
+        return null;
+    }
+
+    public bool isPlayerLooking(String tag) // returns true if the player is close enough to and is looking at the given object
+    {
+        RaycastHit hit; // if i'm close, & a raycast from the player hit the the object to look at, return true
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit) && hit.transform.tag == tag && hit.distance < reach)
+        {
             return true;
         }
         return false;
