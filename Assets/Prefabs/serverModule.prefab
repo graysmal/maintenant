@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 993061375}
   - component: {fileID: 993061377}
   - component: {fileID: 993061376}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: ip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 1670098793010974829}
   - component: {fileID: 729065564933476227}
   - component: {fileID: 2885303855952913906}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: switch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +267,8 @@ GameObject:
   - component: {fileID: 7839087205231603731}
   - component: {fileID: 5417547838663115993}
   - component: {fileID: 6696688473035386709}
-  m_Layer: 0
+  - component: {fileID: 2253385743555705791}
+  m_Layer: 1
   m_Name: serverModule
   m_TagString: server
   m_Icon: {fileID: 0}
@@ -356,6 +357,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8670151273213183110, guid: ddb3da1c1e6241846aed1a21764ab9ad, type: 3}
+--- !u!114 &2253385743555705791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5777559213737567500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b136bc1ffa332b4d8c02e36fac9538e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ready: 1
 --- !u!1 &6773517540175751431
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +381,7 @@ GameObject:
   - component: {fileID: 8968612369234972191}
   - component: {fileID: 246023807141524103}
   - component: {fileID: 4581640011883696024}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: plug
   m_TagString: Untagged
   m_Icon: {fileID: 0}

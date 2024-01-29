@@ -33,8 +33,18 @@ public class PlayerInteractions : MonoBehaviour
 
     IEnumerator inspectServer() {
         GameObject server = controller.lookingAt();
+        if (!server.GetComponent<Server>().ready)
+        {
+            controller.can_move = true;
+            inspecting_server = false;
+            yield break;
+        }
+        else {
+            server.GetComponent<Server>().ready = false;
+        }
         Collider server_collider = server.GetComponent<Collider>();
-        server_collider.enabled = false;
+        GameObject server_cord = server.transform.parent.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
+        server_cord.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Vector3 original_position = server.transform.position;
         Quaternion original_rotation = server.transform.rotation;
@@ -53,8 +63,9 @@ public class PlayerInteractions : MonoBehaviour
             server.transform.rotation = Quaternion.Lerp(server.transform.rotation, original_rotation, 6.26f * Time.deltaTime);
             yield return null;
         }
-        server_collider.enabled = true;
-        
+        server_cord.SetActive(false);
+        server.GetComponent<Server>().ready = true;
+
     }
     IEnumerator rotateServer(GameObject server) {
         while (inspecting_server)

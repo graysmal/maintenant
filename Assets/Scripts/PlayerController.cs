@@ -289,16 +289,6 @@ public class PlayerController : MonoBehaviour
         return degree;
     }
 
-    public bool isPlayerLooking(GameObject objectToLookAt) // returns true if the player is close enough to and is looking at the given object
-    {
-        RaycastHit hit; // if i'm close, & a raycast from the player hit the the object to look at, return true
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit) && hit.transform == objectToLookAt.transform && hit.distance < reach)
-        {
-            return true;
-        }
-        return false;
-    }
-
     public GameObject lookingAt() // returns true if the player is close enough to and is looking at the given object
     {
         RaycastHit hit; // if i'm close, & a raycast from the player hit the the object to look at, return true
