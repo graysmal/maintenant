@@ -5,12 +5,13 @@ using UnityEngine;
 public class Server : MonoBehaviour
 {
     public static int serverCount;
-    public bool enabled;
+    public static string[] IPs = { };
+    public bool turnedOn;
     public bool ready;
     // Start is called before the first frame update
     void Start()
     {
-        enabled = true;
+        turnedOn = true;
         serverCount++;
     }
 
@@ -18,6 +19,26 @@ public class Server : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void generateIPs(int amount)
+    {
+        string[] ips = new string[amount];
+        string root = "192.168.";
+        int differentiator = 0;
+        for (int i = 1; i < amount; i++)
+        {
+            if (i % 255 == 0) {
+                differentiator += 1;
+            }
+            if (i > 255) {
+                string ip = root + differentiator + "." + (i % 255);
+                Debug.Log(ip);
+                ips[i] = ip;
+
+            }
+        }
+        IPs = ips;
     }
 
     public int getServerCount()

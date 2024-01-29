@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         server = new Server();
+        server.generateIPS();
     }
 
     // Update is called once per frame
