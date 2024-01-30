@@ -11,6 +11,7 @@ public class Server : MonoBehaviour
     public GameObject plug;
     public GameObject switch_object;
     public TextMeshPro ip_text;
+    public Light status_light;
     public GameObject cord;
     Collider server_collider;
 
@@ -21,11 +22,13 @@ public class Server : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager.serverCount++;
+        //gameManager.serverCount++;
+        gameManager.servers.Add(this.gameObject);
 
         plug = transform.GetChild(0).gameObject;
         switch_object = transform.GetChild(1).gameObject;
         ip_text = transform.GetChild(2).gameObject.GetComponent<TextMeshPro>();
+        status_light = transform.GetChild(3).gameObject.GetComponent<Light>();
         cord = transform.parent.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
 
         server_collider = GetComponent<Collider>();

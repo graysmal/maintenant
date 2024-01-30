@@ -7144,8 +7144,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4bf70baf2857dc4e89ed22fec6b8d62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverCount: 0
+  servers: []
   ips: []
+  time: 0
+  frequency: 5
 --- !u!4 &374786294
 Transform:
   m_ObjectHideFlags: 0
@@ -14362,10 +14364,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7871105288003436124, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
-      propertyPath: gameManager
-      value: 
-      objectReference: {fileID: 374786293}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
 --- !u!1001 &684626440

@@ -57,6 +57,7 @@ public class PlayerInteractions : MonoBehaviour
         Quaternion original_rotation = server.transform.rotation;
         Vector3 destination = controller.cam.transform.position + (controller.cam.transform.forward * 1);
         StartCoroutine(rotateServer(server));
+
         // move to destination position until server is put back down
         while (!Input.GetKeyDown(KeyCode.Tab)) {
             destination += (controller.cam.transform.forward * Input.GetAxis("Mouse ScrollWheel"));
