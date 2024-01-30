@@ -25,46 +25,60 @@ public class PlayerInteractions : MonoBehaviour
         else { looking_at_server = false; }
 
         if (!inspecting_server && looking_at_server && Input.GetKeyDown(KeyCode.E)) {
-            controller.can_move = false;
-            inspecting_server = true;
             StartCoroutine(inspectServer());
         }
     }
 
     IEnumerator inspectServer() {
         GameObject server = controller.lookingAt();
-        if (!server.GetComponent<Server>().ready)
+        Server serverScript = server.GetComponent<Server>();
+
+        // if server isn't ready to be interacted with again, cancel coroutine
+        if (serverScript.ready == false)
         {
-            controller.can_move = true;
-            inspecting_server = false;
             yield break;
         }
+        // if server is ready, make not ready for interaction again
         else {
             server.GetComponent<Server>().ready = false;
         }
-        Collider server_collider = server.GetComponent<Collider>();
-        GameObject server_cord = server.transform.parent.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
-        server_cord.SetActive(true);
+
         Cursor.lockState = CursorLockMode.None;
+        controller.can_move = false;
+        inspecting_server = true;
+
+        serverScript.plug.SetActive(true);
+        serverScript.switch_object.SetActive(true);
+        serverScript.cord.SetActive(true);
+        serverScript.ip_text.gameObject.SetActive(true);
+
+        
         Vector3 original_position = server.transform.position;
         Quaternion original_rotation = server.transform.rotation;
         Vector3 destination = controller.cam.transform.position + (controller.cam.transform.forward * 1);
         StartCoroutine(rotateServer(server));
+        // move to destination position until server is put back down
         while (!Input.GetKeyDown(KeyCode.Tab)) {
             destination += (controller.cam.transform.forward * Input.GetAxis("Mouse ScrollWheel"));
             server.transform.position = Vector3.Lerp(server.transform.position, destination, 6.26f * Time.deltaTime);
             yield return null;
         }
-        controller.can_move = true;
+
         Cursor.lockState = CursorLockMode.Locked;
+        controller.can_move = true;
         inspecting_server = false;
+
+        // move server back to original position
         while (Vector3.Distance(server.transform.position, original_position) > 0.0001f) {
             server.transform.position = Vector3.Lerp(server.transform.position, original_position, 6.26f * Time.deltaTime);
             server.transform.rotation = Quaternion.Lerp(server.transform.rotation, original_rotation, 6.26f * Time.deltaTime);
             yield return null;
         }
-        server_cord.SetActive(false);
-        server.GetComponent<Server>().ready = true;
+        serverScript.plug.SetActive(false);
+        serverScript.switch_object.SetActive(false);
+        serverScript.cord.SetActive(false);
+        serverScript.ip_text.gameObject.SetActive(false);
+        serverScript.ready = true;
 
     }
     IEnumerator rotateServer(GameObject server) {

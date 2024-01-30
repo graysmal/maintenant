@@ -1199,6 +1199,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3355463493409940417}
     m_Modifications:
+    - target: {fileID: 993061374, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253385743555705791, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
+      propertyPath: turnedOn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488589268227881922, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5777559213737567500, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
       propertyPath: m_Name
       value: serverModule
@@ -1245,6 +1257,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6585902932773617590, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6773517540175751431, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

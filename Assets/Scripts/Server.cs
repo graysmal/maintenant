@@ -1,48 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class Server : MonoBehaviour
 {
-    public static int serverCount;
-    public static string[] IPs = { };
+    public GameManager gameManager;
+
+    public GameObject plug;
+    public GameObject switch_object;
+    public TextMeshPro ip_text;
+    public GameObject cord;
+    Collider server_collider;
+
     public bool turnedOn;
     public bool ready;
+
+    public string ip;
     // Start is called before the first frame update
     void Start()
     {
-        turnedOn = true;
-        serverCount++;
+        gameManager.serverCount++;
+
+        plug = transform.GetChild(0).gameObject;
+        switch_object = transform.GetChild(1).gameObject;
+        ip_text = transform.GetChild(2).gameObject.GetComponent<TextMeshPro>();
+        cord = transform.parent.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
+
+        server_collider = GetComponent<Collider>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
-    }
-
-    void generateIPs(int amount)
-    {
-        string[] ips = new string[amount];
-        string root = "192.168.";
-        int differentiator = 0;
-        for (int i = 1; i < amount; i++)
+        if (ip.Equals(""))
         {
-            if (i % 255 == 0) {
-                differentiator += 1;
-            }
-            if (i > 255) {
-                string ip = root + differentiator + "." + (i % 255);
-                Debug.Log(ip);
-                ips[i] = ip;
-
-            }
+            grabRandomIP();
         }
-        IPs = ips;
+        if (!ip_text.Equals(ip)) { 
+            ip_text.text = ip;
+        }
     }
 
-    public int getServerCount()
-    {
-        return serverCount;
+    void grabRandomIP() {
+        Debug.Log(gameManager.ips.Count);
+        string temp_ip = gameManager.ips.ElementAt(UnityEngine.Random.Range(0, gameManager.ips.Count));
+        gameManager.ips.Remove(temp_ip);
+        ip = temp_ip;
     }
+    
 }

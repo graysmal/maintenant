@@ -17,8 +17,7 @@ public class ropeParent : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        Debug.Log(top_parent.transform.position + " | " + top.transform.position + " || " + bottom_parent.transform.position + " | " + bottom.transform.position);
+    { 
         top.transform.position = top_parent.transform.position;
         bottom.transform.position = bottom_parent.transform.position;
         
