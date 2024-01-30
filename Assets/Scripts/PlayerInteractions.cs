@@ -34,13 +34,13 @@ public class PlayerInteractions : MonoBehaviour
         Server serverScript = server.GetComponent<Server>();
 
         // if server isn't ready to be interacted with again, cancel coroutine
-        if (serverScript.ready == false)
+        if (serverScript.still == false)
         {
             yield break;
         }
         // if server is ready, make not ready for interaction again
         else {
-            server.GetComponent<Server>().ready = false;
+            server.GetComponent<Server>().still = false;
         }
 
         Cursor.lockState = CursorLockMode.None;
@@ -79,7 +79,7 @@ public class PlayerInteractions : MonoBehaviour
         serverScript.switch_object.SetActive(false);
         serverScript.cord.SetActive(false);
         serverScript.ip_text.gameObject.SetActive(false);
-        serverScript.ready = true;
+        serverScript.still = true;
 
     }
     IEnumerator rotateServer(GameObject server) {

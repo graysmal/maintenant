@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
     float sprinting_cam_fov = 65;
 
     public Vector3 velocity;
-    Collider collider;
+    Collider player_collider;
     Rigidbody rb;
     public GameObject cam;
 
@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
         // lock cursor to center of screen
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
 
-        collider = gameObject.GetComponent<CapsuleCollider>();
+        player_collider = gameObject.GetComponent<CapsuleCollider>();
         rb = gameObject.GetComponent<Rigidbody>();
         cam = gameObject.transform.GetChild(0).gameObject;
     }
@@ -100,25 +100,25 @@ public class PlayerController : MonoBehaviour
     {
         // if there is collision below player, grounded is true
 
-        grounded = Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f);
+        grounded = Physics.Raycast(transform.position, -Vector3.up, player_collider.bounds.extents.y + 0.1f);
 
         // if player is crouching, check headroom for being able to uncrouch
         if (crouching)
         {
             has_headroom = (!Physics.CheckSphere(
-                        transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f + default_player_scale.y / 2, 0),
+                        transform.position + new Vector3(0, player_collider.bounds.extents.y + 0.055f + default_player_scale.y / 2, 0),
                         default_player_scale.y / 2));
         }
         // if player isn't crouching, check if there is any headroom at all above player
         else
         {
             has_headroom = (!Physics.CheckCapsule(
-                            transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f, 0) + transform.forward * .35f,
-                            transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f, 0) - transform.forward * .35f,
+                            transform.position + new Vector3(0, player_collider.bounds.extents.y + 0.055f, 0) + transform.forward * .35f,
+                            transform.position + new Vector3(0, player_collider.bounds.extents.y + 0.055f, 0) - transform.forward * .35f,
                             0.05f) ||
                         !Physics.CheckCapsule(
-                            transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f, 0) + transform.right * .35f,
-                            transform.position + new Vector3(0, collider.bounds.extents.y + 0.055f, 0) - transform.right * .35f,
+                            transform.position + new Vector3(0, player_collider.bounds.extents.y + 0.055f, 0) + transform.right * .35f,
+                            transform.position + new Vector3(0, player_collider.bounds.extents.y + 0.055f, 0) - transform.right * .35f,
                             0.05f));
         }
 

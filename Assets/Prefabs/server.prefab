@@ -81,7 +81,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3677368177050630346
 Transform:
   m_ObjectHideFlags: 0
@@ -109,7 +109,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.00126791, g: 1, b: 0, a: 1}
-  m_Intensity: 4
+  m_Intensity: 20
   m_Range: 0.1
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1310,9 +1310,21 @@ PrefabInstance:
       value: -0.045
       objectReference: {fileID: 0}
     - target: {fileID: 2253385743555705791, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
+      propertyPath: rate
+      value: 0.0016260162
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253385743555705791, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
+      propertyPath: still
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2253385743555705791, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
       propertyPath: turnedOn
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2885303855952913906, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3095f216f9dcae94fa8464325ecc7682, type: 2}
     - target: {fileID: 3488589268227881922, guid: 2198f998501b0a140bd9f346cd7084f1, type: 3}
       propertyPath: m_IsActive
       value: 0

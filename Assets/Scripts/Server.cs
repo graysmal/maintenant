@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class Server : MonoBehaviour
@@ -16,9 +17,12 @@ public class Server : MonoBehaviour
     Collider server_collider;
 
     public bool turnedOn;
-    public bool ready;
+    public bool still;
+    public bool event_ongoing;
 
     public string ip;
+
+    public float rate;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +48,31 @@ public class Server : MonoBehaviour
         }
         if (!ip_text.Equals(ip)) { 
             ip_text.text = ip;
+        }
+        if (turnedOn)
+        {
+            gameManager.progress += rate * Time.deltaTime;
+            switch_object.transform.localEulerAngles = Vector3.right * 30;
+        }
+        else {
+            switch_object.transform.localEulerAngles = Vector3.right * -30;
+            status_light.gameObject.SetActive(false);
+        }
+    }
+
+    public void startEvent(int eventID) {
+        
+        switch (eventID) {
+            // if server only needs to be turned off and back on
+            case 0:
+                status_light.color = Color.yellow;
+                status_light.gameObject.SetActive(true);
+                break;
+            // if server needs to have ip entered on computer
+            case 1:
+                status_light.color = Color.red;
+                status_light.gameObject.SetActive(true);
+                break;
         }
     }
 

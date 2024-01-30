@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour
     public float frequency = 5; // seconds
     float next_time = 0;
 
+    public int tempEventType;
+    public float progress;
+    public float progress_to_end;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,12 +29,20 @@ public class GameManager : MonoBehaviour
         if (time > next_time) {
             next_time += frequency;
             Debug.Log("removed one");
-            GameObject selected_server = servers.ElementAt(Random.Range(0, servers.Count));
-            
-            servers.ElementAt(Random.Range(0, servers.Count)).GetComponent<Server>().status_light.color = Color.green;
-            servers.ElementAt(Random.Range(0, servers.Count)).GetComponent<Server>().status_light.gameObject.SetActive(true);
+            getAvailableServer();
+            Server selected_server = getAvailableServer().GetComponent<Server>();
+            selected_server.startEvent(tempEventType);
 
         }
+    }
+
+    public GameObject getAvailableServer() {
+        GameObject server = servers.ElementAt(Random.Range(0, servers.Count));
+        Server server_script = server.GetComponent<Server>();
+        if (server_script.event_ongoing == true || server_script.still == false) {
+            server = getAvailableServer();
+        }
+        return server;
     }
 
     public void generateIPs(int amount)
