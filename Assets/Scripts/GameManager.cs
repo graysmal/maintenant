@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
         time += Time.deltaTime;
         if (time > next_time) {
             next_time += frequency;
-            Debug.Log("removed one");
             getAvailableServer();
             Server selected_server = getAvailableServer().GetComponent<Server>();
             selected_server.startEvent(tempEventType);

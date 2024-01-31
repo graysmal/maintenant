@@ -350,6 +350,8 @@
 "Assets/Scripts/PlayerInteractions.cs"
 "Assets/Scripts/ropeParent.cs"
 "Assets/Scripts/Server.cs"
+"Assets/Scripts/ServerSwitch.cs"
+"Assets/Scripts/temptingObject.cs"
 -langversion:9.0
 
 /deterministic

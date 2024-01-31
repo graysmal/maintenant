@@ -3266,10 +3266,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1096413531}
     m_Modifications:
-    - target: {fileID: 2962164836715805269, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.206
-      objectReference: {fileID: 0}
     - target: {fileID: 3355463493409940416, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
       propertyPath: m_Name
       value: server0
@@ -3317,34 +3313,6 @@ PrefabInstance:
     - target: {fileID: 3355463493409940417, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4762450639039233569, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7301189228901160334, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.2399993
-      objectReference: {fileID: 0}
-    - target: {fileID: 7301189228901160334, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.29011768
-      objectReference: {fileID: 0}
-    - target: {fileID: 7301189228901160334, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.045497924
-      objectReference: {fileID: 0}
-    - target: {fileID: 7301189228901160334, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9657248
-      objectReference: {fileID: 0}
-    - target: {fileID: 7301189228901160334, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.25956807
-      objectReference: {fileID: 0}
-    - target: {fileID: 7301189228901160334, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 30.089
       objectReference: {fileID: 0}
     - target: {fileID: 7871105288003436124, guid: a3af4cc727033e546a77eebc72415f3f, type: 3}
       propertyPath: gameManager
@@ -7194,7 +7162,7 @@ MonoBehaviour:
   ips: []
   time: 0
   frequency: 0.2
-  tempEventType: 0
+  tempEventType: 1
   progress: 0
   progress_to_end: 300
 --- !u!4 &374786294
