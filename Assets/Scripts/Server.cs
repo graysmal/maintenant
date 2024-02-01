@@ -16,6 +16,9 @@ public class Server : MonoBehaviour
     public Light status_light;
     public GameObject cord;
 
+
+    public float off_position_offset;
+
     public bool permanently_disabled;
     private bool _turnedOn;
     public bool turnedOn { 
@@ -25,19 +28,17 @@ public class Server : MonoBehaviour
             {
                 if (permanently_disabled == false)
                 {
-                    if (status_light.color == Color.yellow) { 
-                        
-                    }
                     switch_object.transform.localEulerAngles = Vector3.right * 30;
                     status_light.gameObject.SetActive(true);
-                }
-                else {
-                    Debug.Log("Server " + ip + " tried to turn on, it failed.");
                 }
             }
             else if (_turnedOn == true && value == false) {
                 switch_object.transform.localEulerAngles = Vector3.right * -30;
                 status_light.gameObject.SetActive(false);
+                if (event_ongoing && current_event == ServerEvent.YELLOW) {
+                    event_ongoing = false;
+                    status_light.color = Color.green;
+                }
             }
             _turnedOn = value;
         }
@@ -50,8 +51,6 @@ public class Server : MonoBehaviour
     public string ip;
 
     public float rate;
-
-    float timer;
     // Start is called before the first frame update
     void Start()
     {
@@ -93,13 +92,13 @@ public class Server : MonoBehaviour
             case 1:
                 event_ongoing = true;
                 current_event = ServerEvent.YELLOW;
-                StartCoroutine(blinkLight(Color.yellow, 12));
+                StartCoroutine(blinkLight(Color.yellow, 30));
                 break;
             // if server needs to have ip entered on computer
             case 2:
                 event_ongoing = true;
                 current_event = ServerEvent.RED;
-                StartCoroutine(blinkLight(Color.red, 12));
+                StartCoroutine(blinkLight(Color.red, 40));
                 break;
         }
     }
@@ -112,19 +111,19 @@ public class Server : MonoBehaviour
     }
 
     IEnumerator blinkLight(Color color, float time) {
-        float starting_time = timer;
+        float starting_time = gameManager.time;
         //time = time + starting_time;
         status_light.color = color;
         while (event_ongoing) {
-            if ((timer + starting_time) >= time)
+            if (gameManager.time >= (starting_time + time))
             {
                 permanently_disabled = true;
+                transform.parent.position = transform.parent.position + transform.parent.up * off_position_offset;
                 turnedOn = false;
                 yield break;
             }
-            Debug.Log(timer);
             status_light.gameObject.SetActive(!status_light.gameObject.activeSelf);
-            yield return new WaitForSeconds((-0.8f / time)*((timer - starting_time)) + 1f);
+            yield return new WaitForSeconds((-0.8f / time)*((gameManager.time - starting_time)) + 1f);
         }
     }
 }

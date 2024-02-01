@@ -1564,7 +1564,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3478438648437053203, guid: b51d141f887b71942a832f17e5a81b04, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 23.95
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3478438648437053203, guid: b51d141f887b71942a832f17e5a81b04, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7161,7 +7161,7 @@ MonoBehaviour:
   servers: []
   ips: []
   time: 0
-  frequency: 0.2
+  frequency: 2
   tempEventType: 1
   progress: 0
   progress_to_end: 300

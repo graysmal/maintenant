@@ -34,7 +34,7 @@ public class PlayerInteractions : MonoBehaviour
         Server serverScript = server.GetComponent<Server>();
 
         // if server isn't ready to be interacted with again, cancel coroutine
-        if (serverScript.still == false)
+        if (serverScript.still == false || serverScript.permanently_disabled == true)
         {
             yield break;
         }
@@ -53,7 +53,7 @@ public class PlayerInteractions : MonoBehaviour
         serverScript.ip_text.gameObject.SetActive(true);
 
         
-        Vector3 original_position = server.transform.position;
+        Vector3 original_position = server.transform.parent.position;
         Quaternion original_rotation = server.transform.rotation;
         Vector3 destination = controller.cam.transform.position + (controller.cam.transform.forward * 1);
         StartCoroutine(rotateServer(server));
@@ -70,8 +70,8 @@ public class PlayerInteractions : MonoBehaviour
         inspecting_server = false;
 
         // move server back to original position
-        while (Vector3.Distance(server.transform.position, original_position) > 0.0001f) {
-            server.transform.position = Vector3.Lerp(server.transform.position, original_position, 6.26f * Time.deltaTime);
+        while (Vector3.Distance(server.transform.position, server.transform.parent.position) > 0.0001f) {
+            server.transform.position = Vector3.Lerp(server.transform.position, server.transform.parent.position, 6.26f * Time.deltaTime);
             server.transform.rotation = Quaternion.Lerp(server.transform.rotation, original_rotation, 6.26f * Time.deltaTime);
             yield return null;
         }

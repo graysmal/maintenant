@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
             next_time += frequency;
             getAvailableServer();
             Server selected_server = getAvailableServer().GetComponent<Server>();
-            selected_server.startEvent(tempEventType);
+            selected_server.startEvent(Random.Range(0, 2));
 
         }
     }
