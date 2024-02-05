@@ -91,8 +91,7 @@ public class Laptop : MonoBehaviour
                         laptop_current_input = "";
                     }
                 }
-                else {
-                    Debug.Log(laptop_current_input.Length);
+                else { 
                     if (laptop_current_input.Length < 15)
                     {
                         laptop_current_input += character;

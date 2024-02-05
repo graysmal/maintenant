@@ -16,8 +16,6 @@ public class Server : MonoBehaviour
     public Light status_light;
     public GameObject cord;
 
-    public float yellow_event_time;
-    public float red_event_time;
 
 
     public float off_position_offset;
@@ -53,11 +51,16 @@ public class Server : MonoBehaviour
         set {
             if (_event_ongoing == false && value == true)
             {
+                gameManager.servers.Remove(this.gameObject);
                 gameManager.ongoing_event_servers.Add(this.gameObject);
             }
             else if (_event_ongoing == true && value == false) {
                 gameManager.ongoing_event_servers.Remove(this.gameObject);
+                if (!permanently_disabled) {
+                    gameManager.servers.Add(this.gameObject);
+                }
             }
+            
             _event_ongoing = value;
         }
     }
@@ -105,13 +108,13 @@ public class Server : MonoBehaviour
             case 1:
                 event_ongoing = true;
                 current_event = ServerEvent.YELLOW;
-                StartCoroutine(blinkLight(Color.yellow, yellow_event_time));
+                StartCoroutine(blinkLight(Color.yellow, gameManager.yellow_event_time));
                 break;
             // if server needs to have ip entered on computer
             case 2:
                 event_ongoing = true;
                 current_event = ServerEvent.RED;
-                StartCoroutine(blinkLight(Color.red, red_event_time));
+                StartCoroutine(blinkLight(Color.red, gameManager.red_event_time));
                 break;
         }
         
@@ -131,6 +134,17 @@ public class Server : MonoBehaviour
         while (event_ongoing) {
             if (gameManager.time >= (starting_time + time))
             {
+                gameManager.servers.Remove(gameObject);
+                // if user lets a red server die, spawn three more red events
+                if (current_event == ServerEvent.RED) {
+                    for (int i = 0; i < 3; i++) {
+                        if (gameManager.servers.Count > 0)
+                        {
+                            gameManager.startRandomEvent(2);
+                        }
+                    }
+                    
+                }
                 permanently_disabled = true;
                 event_ongoing = false;
                 transform.parent.position = transform.parent.position + transform.parent.up * off_position_offset;

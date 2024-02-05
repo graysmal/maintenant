@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour
     public float frequency = 5; // seconds
     float next_time = 0;
 
-    public int tempEventType;
+    public float yellow_event_time;
+    public float red_event_time;
+
     public float progress;
     public float progress_to_end;
 
@@ -29,11 +31,33 @@ public class GameManager : MonoBehaviour
         time += Time.deltaTime;
         if (time > next_time) {
             next_time += frequency;
-            getAvailableServer();
-            Server selected_server = getAvailableServer().GetComponent<Server>();
-            selected_server.startEvent(Random.Range(0, 3));
+            startRandomEvent();
 
         }
+    }
+
+    public void startRandomEvent()
+    {
+        getAvailableServer();
+        Server selected_server = getAvailableServer().GetComponent<Server>();
+        // off event weight out of 100
+        float off_w = 50;
+        // yellow event weight out of 100
+        float yel_w = 30;
+        // red event weight out of 100
+        float red_w = 20;
+        float rand = Random.Range(1, 100);
+        if (rand)
+
+        selected_server.startEvent(Random.Range(0, 3));
+    }
+
+    public void startRandomEvent(int event_id)
+    {
+        getAvailableServer();
+        Server selected_server = getAvailableServer().GetComponent<Server>();
+        selected_server.startEvent(event_id);
+
     }
 
     public GameObject getAvailableServer() {

@@ -45,9 +45,11 @@ public class PlayerController : MonoBehaviour
             if (_can_move == false && value == true)
             {
                 UI.SetActive(true);
+                rb.useGravity = true;
             }
             else if (_can_move == true && value == false) {
                 UI.SetActive(false);
+                rb.useGravity = false;
             }
             _can_move = value;
         }
