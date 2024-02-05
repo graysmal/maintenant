@@ -8,6 +8,7 @@ public class PlayerInteractions : MonoBehaviour
 
     bool looking_at_server;
     bool inspecting_server;
+    bool on_laptop;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,10 @@ public class PlayerInteractions : MonoBehaviour
 
         if (!inspecting_server && looking_at_server && Input.GetKeyDown(KeyCode.E)) {
             StartCoroutine(inspectServer());
+        }
+
+        if (controller.isPlayerLooking("laptop") && Input.GetKeyDown(KeyCode.E) && !on_laptop) {
+            StartCoroutine(interactWithLaptop());
         }
     }
 
@@ -59,7 +64,7 @@ public class PlayerInteractions : MonoBehaviour
         StartCoroutine(rotateServer(server));
 
         // move to destination position until server is put back down
-        while (!Input.GetKeyDown(KeyCode.Tab)) {
+        while (!Input.GetKeyDown(KeyCode.Tab) && !serverScript.permanently_disabled) {
             destination += (controller.cam.transform.forward * Input.GetAxis("Mouse ScrollWheel"));
             server.transform.position = Vector3.Lerp(server.transform.position, destination, 6.26f * Time.deltaTime);
             yield return null;
@@ -71,8 +76,8 @@ public class PlayerInteractions : MonoBehaviour
 
         // move server back to original position
         while (Vector3.Distance(server.transform.position, server.transform.parent.position) > 0.0001f) {
-            server.transform.position = Vector3.Lerp(server.transform.position, server.transform.parent.position, 6.26f * Time.deltaTime);
-            server.transform.rotation = Quaternion.Lerp(server.transform.rotation, original_rotation, 6.26f * Time.deltaTime);
+            server.transform.position = Vector3.Lerp(server.transform.position, server.transform.parent.position, 12.26f * Time.deltaTime);
+            server.transform.rotation = Quaternion.Lerp(server.transform.rotation, original_rotation, 12.26f * Time.deltaTime);
             yield return null;
         }
         serverScript.plug.SetActive(false);
@@ -94,5 +99,38 @@ public class PlayerInteractions : MonoBehaviour
             yield return null;
         }
         
+    }
+
+    IEnumerator interactWithLaptop() {
+        GameObject laptop = controller.lookingAt();
+        Laptop laptop_script = laptop.transform.parent.GetComponent<Laptop>();
+
+        on_laptop = true;
+        Cursor.lockState = CursorLockMode.None;
+        controller.can_move = false;
+        laptop.transform.parent.GetComponent<Animator>().Play("laptop_open");
+        Coroutine laptop_listen = StartCoroutine(laptop_script.listenLaptopInput());
+        while (!Input.GetKeyDown(KeyCode.Tab)) {
+            controller.cam.transform.position = Vector3.Lerp(controller.cam.transform.position, laptop_script.cam_destination.position, Time.deltaTime * 6.56f);
+            controller.cam.transform.rotation = Quaternion.Lerp(controller.cam.transform.rotation, laptop_script.cam_destination.rotation, Time.deltaTime * 6.56f);
+            yield return null;
+        }
+
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        controller.can_move = true;
+        laptop.transform.parent.GetComponent<Animator>().Play("laptop_close");
+        StopCoroutine(laptop_listen);
+        Vector3 orig_cam_position = controller.transform.position + new Vector3(0, 0.6f, 0);
+        Vector3 orig_cam_rotation = new Vector3(controller.cam.transform.localEulerAngles.x, 0, 0);
+        while ((Vector3.Distance(controller.cam.transform.position, orig_cam_position) > 0.0001f) || Vector3.Distance(controller.cam.transform.localEulerAngles, orig_cam_rotation) > 0.0001f) {
+            orig_cam_position = controller.transform.position + new Vector3(0, 0.6f, 0);
+            orig_cam_rotation = new Vector3(controller.cam.transform.localEulerAngles.x, 0, 0);
+            controller.cam.transform.position = Vector3.Lerp(controller.cam.transform.position, orig_cam_position, Time.deltaTime * 12.56f);
+            controller.cam.transform.localEulerAngles = Vector3.Lerp(controller.cam.transform.localEulerAngles, orig_cam_rotation, Time.deltaTime * 12.56f);
+            yield return null;
+        }
+        on_laptop = false;
+        yield return null;
     }
 }

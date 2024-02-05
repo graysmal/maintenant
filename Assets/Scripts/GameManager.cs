@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     //public int serverCount;
     public List<GameObject> servers = new List<GameObject>();
+    public List<GameObject> ongoing_event_servers = new List<GameObject>();
     public List<string> ips = new List<string>();
     public float time = 0;
     public float frequency = 5; // seconds
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour
             next_time += frequency;
             getAvailableServer();
             Server selected_server = getAvailableServer().GetComponent<Server>();
-            selected_server.startEvent(Random.Range(0, 2));
+            selected_server.startEvent(Random.Range(0, 3));
 
         }
     }

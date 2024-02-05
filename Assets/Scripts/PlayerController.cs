@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     public enum crouchModes {TOGGLE, HOLD};
     public crouchModes crouch_mode = crouchModes.TOGGLE;
 
+    public GameObject UI;
+
     public float movement_speed; // 800
     public float default_drag; // 3
     public float jump_force; // 405
@@ -36,7 +38,20 @@ public class PlayerController : MonoBehaviour
     public float ver_curs_inp;
 
     // player states
-    public bool can_move;
+    private bool _can_move = true;
+    public bool can_move {
+        get { return _can_move;  }
+        set {
+            if (_can_move == false && value == true)
+            {
+                UI.SetActive(true);
+            }
+            else if (_can_move == true && value == false) {
+                UI.SetActive(false);
+            }
+            _can_move = value;
+        }
+    }
     public bool grounded;
     public bool has_headroom;
     public bool moving;

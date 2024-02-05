@@ -16,6 +16,9 @@ public class Server : MonoBehaviour
     public Light status_light;
     public GameObject cord;
 
+    public float yellow_event_time;
+    public float red_event_time;
+
 
     public float off_position_offset;
 
@@ -44,7 +47,20 @@ public class Server : MonoBehaviour
         }
     }
     public bool still;
-    public bool event_ongoing;
+    private bool _event_ongoing;
+    public bool event_ongoing {
+        get { return _event_ongoing; }
+        set {
+            if (_event_ongoing == false && value == true)
+            {
+                gameManager.ongoing_event_servers.Add(this.gameObject);
+            }
+            else if (_event_ongoing == true && value == false) {
+                gameManager.ongoing_event_servers.Remove(this.gameObject);
+            }
+            _event_ongoing = value;
+        }
+    }
     public enum ServerEvent { YELLOW, RED }
     public ServerEvent current_event;
 
@@ -54,7 +70,6 @@ public class Server : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //gameManager.serverCount++;
         gameManager.servers.Add(this.gameObject);
         turnedOn = true;
         plug = transform.GetChild(0).gameObject;
@@ -62,8 +77,6 @@ public class Server : MonoBehaviour
         ip_text = transform.GetChild(2).gameObject.GetComponent<TextMeshPro>();
         status_light = transform.GetChild(3).gameObject.GetComponent<Light>();
         cord = transform.parent.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
-
-        //server_collider = GetComponent<Collider>();
 
     }
 
@@ -92,19 +105,20 @@ public class Server : MonoBehaviour
             case 1:
                 event_ongoing = true;
                 current_event = ServerEvent.YELLOW;
-                StartCoroutine(blinkLight(Color.yellow, 30));
+                StartCoroutine(blinkLight(Color.yellow, yellow_event_time));
                 break;
             // if server needs to have ip entered on computer
             case 2:
                 event_ongoing = true;
                 current_event = ServerEvent.RED;
-                StartCoroutine(blinkLight(Color.red, 40));
+                StartCoroutine(blinkLight(Color.red, red_event_time));
                 break;
         }
+        
     }
 
     void grabRandomIP() {
-        Debug.Log(gameManager.ips.Count);
+        //Debug.Log(gameManager.ips.Count);
         string temp_ip = gameManager.ips.ElementAt(UnityEngine.Random.Range(0, gameManager.ips.Count));
         gameManager.ips.Remove(temp_ip);
         ip = temp_ip;
@@ -118,6 +132,7 @@ public class Server : MonoBehaviour
             if (gameManager.time >= (starting_time + time))
             {
                 permanently_disabled = true;
+                event_ongoing = false;
                 transform.parent.position = transform.parent.position + transform.parent.up * off_position_offset;
                 turnedOn = false;
                 yield break;
