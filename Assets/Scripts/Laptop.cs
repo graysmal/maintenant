@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
+using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static Server;
 
 public class Laptop : MonoBehaviour
@@ -12,11 +10,18 @@ public class Laptop : MonoBehaviour
     public GameManager gameManager;
     public Transform cam_destination;
 
+    public AudioClip[] keys;
+    public AudioClip key_enter;
+
+    public AudioClip open;
+    public AudioClip close;
+
+    public AudioSource a_source;
     public TextMeshPro laptop_text_obj;
 
     bool blinking = false;
 
-    Color default_color = Color.HSVToRGB(113, 49, 100);
+    Color default_color = new Color(145, 255, 131);
 
     string laptop_past_content = "";
     string laptop_current_line = "> ";
@@ -27,6 +32,7 @@ public class Laptop : MonoBehaviour
     void Start()
     {
         cam_destination = transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).transform.GetChild(1);
+        a_source = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -36,21 +42,25 @@ public class Laptop : MonoBehaviour
     }
 
     public IEnumerator listenLaptopInput() {
+        a_source.PlayOneShot(open);
+        laptop_text_obj.text = laptop_past_content + laptop_current_line;
         StartCoroutine(blinkText(default_color));
         yield return new WaitForSeconds(0.2f);
-        laptop_text_obj.text = laptop_past_content + laptop_current_line;
         while (true) {
             foreach (Char character in Input.inputString)
             {
                 if (character == '\b')
                 {
+                    a_source.PlayOneShot(keys.ElementAt(UnityEngine.Random.Range(0, keys.Length)));
                     if (laptop_current_input.Length != 0)
                     {
                         laptop_current_input = laptop_current_input.Substring(0, laptop_current_input.Length - 1);
                     }
+                    
                 }
                 else if (character == '\n' || character == '\r')
                 {
+                    a_source.PlayOneShot(key_enter);
                     if (laptop_current_input.Equals(""))
                     {
                         StartCoroutine(blinkText(Color.red));
@@ -94,6 +104,7 @@ public class Laptop : MonoBehaviour
                 else { 
                     if (laptop_current_input.Length < 15)
                     {
+                        a_source.PlayOneShot(keys.ElementAt(UnityEngine.Random.Range(0, keys.Length)));
                         laptop_current_input += character;
                     }
                     else {

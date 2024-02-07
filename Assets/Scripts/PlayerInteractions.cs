@@ -120,6 +120,7 @@ public class PlayerInteractions : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         controller.can_move = true;
         laptop.transform.parent.GetComponent<Animator>().Play("laptop_close");
+        laptop_script.a_source.PlayOneShot(laptop_script.close);
         StopCoroutine(laptop_listen);
         Vector3 orig_cam_position = controller.transform.position + new Vector3(0, 0.6f, 0);
         Vector3 orig_cam_rotation = new Vector3(controller.cam.transform.localEulerAngles.x, 0, 0);

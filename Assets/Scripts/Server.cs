@@ -5,10 +5,13 @@ using System.Threading;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class Server : MonoBehaviour
 {
     public GameManager gameManager;
+
+    AudioSource a_source;
 
     public GameObject plug;
     public GameObject switch_object;
@@ -16,7 +19,7 @@ public class Server : MonoBehaviour
     public Light status_light;
     public GameObject cord;
 
-
+    private bool hoodwinked = false;
 
     public float off_position_offset;
 
@@ -36,9 +39,13 @@ public class Server : MonoBehaviour
             else if (_turnedOn == true && value == false) {
                 switch_object.transform.localEulerAngles = Vector3.right * -30;
                 status_light.gameObject.SetActive(false);
-                if (event_ongoing && current_event == ServerEvent.YELLOW) {
+                if (event_ongoing && current_event == ServerEvent.YELLOW)
+                {
                     event_ongoing = false;
                     status_light.color = Color.green;
+                }
+                else if (event_ongoing && current_event == ServerEvent.RED) {
+                    hoodwinked = true;
                 }
             }
             _turnedOn = value;
@@ -80,6 +87,7 @@ public class Server : MonoBehaviour
         ip_text = transform.GetChild(2).gameObject.GetComponent<TextMeshPro>();
         status_light = transform.GetChild(3).gameObject.GetComponent<Light>();
         cord = transform.parent.gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
+        a_source = GetComponent<AudioSource>();
 
     }
 
@@ -103,17 +111,23 @@ public class Server : MonoBehaviour
             // if server only needs to be turned on.
             case 0:
                 turnedOn = false;
+                a_source.clip = gameManager.off_sfx;
+                a_source.Play();
                 break;
             // if server only needs to be turned off and back on
             case 1:
                 event_ongoing = true;
                 current_event = ServerEvent.YELLOW;
+                a_source.clip = gameManager.yel_sfx;
+                a_source.Play();
                 StartCoroutine(blinkLight(Color.yellow, gameManager.yellow_event_time));
                 break;
             // if server needs to have ip entered on computer
             case 2:
                 event_ongoing = true;
                 current_event = ServerEvent.RED;
+                a_source.clip = gameManager.red_sfx;
+                a_source.Play();
                 StartCoroutine(blinkLight(Color.red, gameManager.red_event_time));
                 break;
         }
@@ -129,15 +143,16 @@ public class Server : MonoBehaviour
 
     IEnumerator blinkLight(Color color, float time) {
         float starting_time = gameManager.time;
-        //time = time + starting_time;
         status_light.color = color;
         while (event_ongoing) {
-            if (gameManager.time >= (starting_time + time))
+            if (gameManager.time >= (starting_time + time) || hoodwinked)
             {
                 gameManager.servers.Remove(gameObject);
+                a_source.clip = gameManager.perm_off;
+                a_source.Play();
                 // if user lets a red server die, spawn three more red events
                 if (current_event == ServerEvent.RED) {
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < 2; i++) {
                         if (gameManager.servers.Count > 0)
                         {
                             gameManager.startRandomEvent(2);

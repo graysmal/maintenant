@@ -6,7 +6,15 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     //public int serverCount;
+
+    public AudioClip off_sfx;
+    public AudioClip yel_sfx;
+    public AudioClip red_sfx;
+    public AudioClip perm_off;
+
     public List<GameObject> servers = new List<GameObject>();
+    public GameObject test;
+    public float testVar;
     public List<GameObject> ongoing_event_servers = new List<GameObject>();
     public List<string> ips = new List<string>();
     public float time = 0;
@@ -24,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         next_time = frequency;
         generateIPs(700);
+        StartCoroutine(renderCam());
     }
     // Update is called once per frame
     void Update()
@@ -36,20 +45,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    IEnumerator renderCam() {
+        while (true) {
+            test.GetComponent<Camera>().Render();
+            yield return new WaitForSeconds(testVar);
+        }
+
+    }
+
     public void startRandomEvent()
     {
         getAvailableServer();
         Server selected_server = getAvailableServer().GetComponent<Server>();
         // off event weight out of 100
-        float off_w = 50;
+        //float off_w = 40;
         // yellow event weight out of 100
-        float yel_w = 30;
+        //float yel_w = 50;
         // red event weight out of 100
-        float red_w = 20;
+        //float red_w = 10;
         float rand = Random.Range(1, 100);
-        if (rand)
+        Debug.Log(rand);
+        if (rand < (50))
+        {
+            selected_server.startEvent(1);
+        }
+        else if (rand < (90)) {
+            selected_server.startEvent(0);
+        }
+        else
+        {
+            selected_server.startEvent(2);
+        }
 
-        selected_server.startEvent(Random.Range(0, 3));
     }
 
     public void startRandomEvent(int event_id)
