@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 public class PlayerInteractions : MonoBehaviour
 {
+    public GameManager gameManager;
     PlayerController controller;
 
+    AudioSource a_source;
     bool looking_at_server;
     bool inspecting_server;
     bool on_laptop;
@@ -14,6 +17,7 @@ public class PlayerInteractions : MonoBehaviour
     void Start()
     {
         controller = GetComponent<PlayerController>();
+        a_source = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -50,6 +54,7 @@ public class PlayerInteractions : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.None;
         controller.can_move = false;
+        a_source.PlayOneShot(gameManager.pick_up_sfx);
         inspecting_server = true;
 
         serverScript.plug.SetActive(true);
@@ -72,7 +77,9 @@ public class PlayerInteractions : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         controller.can_move = true;
+        a_source.PlayOneShot(gameManager.put_down_sfx);
         inspecting_server = false;
+
 
         // move server back to original position
         while (Vector3.Distance(server.transform.position, server.transform.parent.position) > 0.0001f) {
