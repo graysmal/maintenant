@@ -11,7 +11,7 @@ public class Server : MonoBehaviour
 {
     public GameManager gameManager;
 
-    AudioSource a_source;
+    public AudioSource a_source;
 
     public GameObject plug;
     public GameObject switch_object;

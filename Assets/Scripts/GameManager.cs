@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public AudioClip perm_off;
     public AudioClip pick_up_sfx;
     public AudioClip put_down_sfx;
+    public AudioClip switch_on;
+    public AudioClip switch_off;
 
     public List<GameObject> servers = new List<GameObject>();
     public GameObject test;
