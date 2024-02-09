@@ -97,6 +97,7 @@ public class Server : MonoBehaviour
     {
         if (!gameObject.activeSelf) {
             turnedOn = false;
+            per
         }
         if (ip.Equals(""))
         {
