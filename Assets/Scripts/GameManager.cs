@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,8 +19,14 @@ public class GameManager : MonoBehaviour
     public AudioClip switch_off;
 
     public List<GameObject> servers = new List<GameObject>();
+    // fix this code
     public GameObject test;
     public float testVar;
+
+    public GameObject progress_bar;
+    Image progress_bar_fill;
+    TextMeshProUGUI eta_text;
+
     public List<GameObject> ongoing_event_servers = new List<GameObject>();
     public List<string> ips = new List<string>();
     public float time = 0;
@@ -28,6 +36,10 @@ public class GameManager : MonoBehaviour
     public float yellow_event_time;
     public float red_event_time;
 
+    public float rate;
+    string eta;
+    int seconds_remaining;
+    int minutes_remaining;
     public float progress;
     public float progress_to_end;
 
@@ -37,6 +49,8 @@ public class GameManager : MonoBehaviour
         next_time = frequency;
         generateIPs(700);
         StartCoroutine(renderCam());
+        progress_bar_fill = progress_bar.transform.GetChild(0).GetComponent<Image>();
+        eta_text = progress_bar.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
     }
     // Update is called once per frame
     void Update()
@@ -47,6 +61,17 @@ public class GameManager : MonoBehaviour
             startRandomEvent();
 
         }
+        seconds_remaining = (int) ((progress_to_end - progress) / (rate * servers.Count));
+        if (seconds_remaining < 0)
+        {
+            seconds_remaining = 0;
+        }
+        minutes_remaining = seconds_remaining / 60;
+        seconds_remaining %= 60;
+        eta = "ETA: " + minutes_remaining + ":" + seconds_remaining;
+        eta_text.text = eta;
+        progress_bar_fill.fillAmount = progress / progress_to_end;
+
     }
 
     IEnumerator renderCam() {

@@ -59,6 +59,8 @@ public class Server : MonoBehaviour
             if (_event_ongoing == false && value == true)
             {
                 gameManager.servers.Remove(this.gameObject);
+                StopAllCoroutines();
+                status_light.gameObject.SetActive(false);
                 gameManager.ongoing_event_servers.Add(this.gameObject);
             }
             else if (_event_ongoing == true && value == false) {
@@ -76,7 +78,6 @@ public class Server : MonoBehaviour
 
     public string ip;
 
-    public float rate;
     // Start is called before the first frame update
     void Start()
     {
@@ -94,6 +95,9 @@ public class Server : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!gameObject.activeSelf) {
+            turnedOn = false;
+        }
         if (ip.Equals(""))
         {
             grabRandomIP();
@@ -101,8 +105,8 @@ public class Server : MonoBehaviour
         if (!ip_text.Equals(ip)) { 
             ip_text.text = ip;
         }
-        if (_turnedOn) {
-            gameManager.progress += rate * Time.deltaTime;
+        if (_turnedOn && !event_ongoing) {
+            gameManager.progress += gameManager.rate * Time.deltaTime;
         }
     }
 
