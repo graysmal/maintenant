@@ -9,20 +9,20 @@ public class light : MonoBehaviour
     AudioSource a_source;
     GameObject bulb;
 
-    bool _enabled = true;
-    public bool enabled {
-        get { return _enabled; }
+    bool _is_enabled = true;
+    public bool is_enabled {
+        get { return _is_enabled; }
         set {
-            if (_enabled == false && value == true)
+            if (_is_enabled == false && value == true)
             {
                 StartCoroutine(turnLightOn());
             }
-            else if (_enabled == true && value == false) {
+            else if (_is_enabled == true && value == false) {
                 bulb.SetActive(false);
                 a_source.Stop();
                 //StartCoroutine(turnLightOff());
             }
-            _enabled = value;
+            _is_enabled = value;
         }
     }
 
@@ -40,9 +40,12 @@ public class light : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if ((gameManager.time - 300) > -1 && (gameManager.time - 300) < 1) {
+            is_enabled = false;
+        }
         if (Input.GetKeyDown(KeyCode.K)) {
-            Debug.Log(!enabled);
-            enabled = (!enabled);
+            Debug.Log(!is_enabled);
+            is_enabled = (!is_enabled);
         }
     }
 
@@ -52,7 +55,7 @@ public class light : MonoBehaviour
         GameObject spot_light = this.transform.GetChild(1).GetChild(1).gameObject;
         float original_intensity = spot_light.GetComponent<Light>().intensity;
         while (true) {
-            while (enabled)
+            while (is_enabled)
             {
                 while (gameManager.time < time_target)
                 {

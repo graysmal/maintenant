@@ -18,11 +18,12 @@ public class PlayerInteractions : MonoBehaviour
     {
         controller = GetComponent<PlayerController>();
         a_source = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() { 
+    
         if (controller.isPlayerLooking("server"))
         {
             looking_at_server = true;
@@ -33,7 +34,7 @@ public class PlayerInteractions : MonoBehaviour
             StartCoroutine(inspectServer());
         }
 
-        if (controller.isPlayerLooking("laptop") && Input.GetKeyDown(KeyCode.E) && !on_laptop) {
+        if (controller.isPlayerLooking("laptop") && Input.GetKeyDown(KeyCode.E) && !on_laptop && !controller.crouching) { 
             StartCoroutine(interactWithLaptop());
         }
     }
@@ -116,6 +117,8 @@ public class PlayerInteractions : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         controller.can_move = false;
         laptop.transform.parent.GetComponent<Animator>().Play("laptop_open");
+        controller.transform.position = new Vector3(8.17f, 1, -3.45f);
+        controller.transform.localEulerAngles = new Vector3(0, 100, 0);
         Coroutine laptop_listen = StartCoroutine(laptop_script.listenLaptopInput());
         while (!Input.GetKeyDown(KeyCode.Tab)) {
             controller.cam.transform.position = Vector3.Lerp(controller.cam.transform.position, laptop_script.cam_destination.position, Time.deltaTime * 6.56f);
