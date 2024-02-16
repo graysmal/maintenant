@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     public GameObject test;
     public float testVar;
 
+    public GameObject light_switch;
+
     public GameObject progress_bar;
     Image progress_bar_fill;
     TextMeshProUGUI eta_text;
@@ -103,26 +105,35 @@ public class GameManager : MonoBehaviour
 
     public void startRandomEvent()
     {
-        getAvailableServer();
-        Server selected_server = getAvailableServer().GetComponent<Server>();
-        // off event weight out of 100
-        float off_w = 50;
-        // yellow event weight out of 100
-        float yel_w = ((-15f/300f) * time) + 50;
-        // red event weight out of 100
-        float red_w = ((15f/300f) * time);
-        float chance_total = off_w + yel_w + red_w;
-        float rand = UnityEngine.Random.Range(1, chance_total);
-        if (rand < off_w)
+        GameObject server_obj = getAvailableServer();
+        if (server_obj == null)
         {
-            selected_server.startEvent(0);
+            return;
         }
-        else if (rand < (off_w + yel_w)) {
-            selected_server.startEvent(1);
-        }
-        else
-        {
-            selected_server.startEvent(2);
+        else {
+            Server selected_server = getAvailableServer().GetComponent<Server>();
+
+            // off event weight out of 100
+            float off_w = 50;
+            // yellow event weight out of 100
+            float yel_w = ((-15f / 300f) * time) + 50;
+            // red event weight out of 100
+            float red_w = ((15f / 300f) * time);
+            float chance_total = off_w + yel_w + red_w;
+            float rand = UnityEngine.Random.Range(1, chance_total);
+            if (rand < off_w)
+            {
+                selected_server.startEvent(0);
+            }
+            else if (rand < (off_w + yel_w))
+            {
+                selected_server.startEvent(1);
+            }
+            else
+            {
+                selected_server.startEvent(2);
+            }
+
         }
 
     }

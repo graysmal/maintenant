@@ -6,6 +6,7 @@ TagManager:
   tags:
   - server
   - laptop
+  - lightswitch
   layers:
   - Default
   - TransparentFX

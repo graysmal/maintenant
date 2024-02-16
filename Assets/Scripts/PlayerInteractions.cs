@@ -37,6 +37,10 @@ public class PlayerInteractions : MonoBehaviour
         if (controller.isPlayerLooking("laptop") && Input.GetKeyDown(KeyCode.E) && !on_laptop && !controller.crouching) { 
             StartCoroutine(interactWithLaptop());
         }
+
+        if (controller.isPlayerLooking("lightswitch") && Input.GetKeyDown(KeyCode.E)) {
+            lightScript.publicToggle();
+        }
     }
 
     IEnumerator inspectServer() {
