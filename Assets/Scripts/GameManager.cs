@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
             startRandomEvent();
 
         }
-        seconds_remaining = (int) ((progress_to_end - progress) / (rate * (servers.Count + ongoing_event_servers.Count)));
+        seconds_remaining = (int) ((progress_to_end - progress) / (rate * (servers.Count)));
         if (seconds_remaining < 0)
         {
             seconds_remaining = 0;
