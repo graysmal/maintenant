@@ -19,7 +19,10 @@ public class GameManager : MonoBehaviour
     public AudioClip put_down_sfx;
     public AudioClip switch_on;
     public AudioClip switch_off;
+    public AudioClip power_up;
+    public AudioClip power_down;
 
+    public GameObject troll;
     public List<GameObject> servers = new List<GameObject>();
     // fix this code w
     public GameObject test;

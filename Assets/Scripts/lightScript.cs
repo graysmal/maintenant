@@ -6,7 +6,7 @@ using static Unity.VisualScripting.Member;
 
 public class lightScript : MonoBehaviour
 {
-    static List<lightScript> lights = new List<lightScript>();
+    public static List<lightScript> lights = new List<lightScript>();
     public GameManager gameManager;
     AudioSource a_source;
     GameObject bulb;
@@ -22,7 +22,8 @@ public class lightScript : MonoBehaviour
             if (_is_enabled == false && value == true)
             {
                 current = StartCoroutine(turnLightOn());
-                l_s_switch.Play("switch_on"); 
+                l_s_switch.Play("switch_on");
+                AudioSource.PlayClipAtPoint(gameManager.power_down, l_s_switch.transform.position);
             }
             else if (_is_enabled == true && value == false) {
                 if (light_turning_on)
@@ -32,7 +33,8 @@ public class lightScript : MonoBehaviour
                 }
                 bulb.SetActive(false);
                 a_source.Stop();
-                l_s_switch.Play("switch_off"); 
+                l_s_switch.Play("switch_off");
+                AudioSource.PlayClipAtPoint(gameManager.power_up, l_s_switch.transform.position);
                 //StartCoroutine(turnLightOff());
             }
             _is_enabled = value;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
@@ -116,6 +117,15 @@ public class PlayerInteractions : MonoBehaviour
     IEnumerator interactWithLaptop() {
         GameObject laptop = controller.lookingAt();
         Laptop laptop_script = laptop.transform.parent.GetComponent<Laptop>();
+        Coroutine troll_corout = null;
+
+        if (!lightScript.lights.ElementAt(0).is_enabled) {
+            int random_float = Random.Range(0, 9);
+            if (random_float == 0) {
+                troll_corout = StartCoroutine(gameManager.troll.GetComponent<Troll>().moveTroll());
+            }
+            
+        }
 
         on_laptop = true;
         Cursor.lockState = CursorLockMode.None;
@@ -136,6 +146,11 @@ public class PlayerInteractions : MonoBehaviour
         laptop.transform.parent.GetComponent<Animator>().Play("laptop_close");
         laptop_script.a_source.PlayOneShot(laptop_script.close);
         StopCoroutine(laptop_listen);
+        if (troll_corout != null) {
+            StopCoroutine(troll_corout);
+        }
+        
+        gameManager.troll.GetComponent<Troll>().hideTroll();
         Vector3 orig_cam_position = controller.transform.position + new Vector3(0, 0.6f, 0);
         Vector3 orig_cam_rotation = new Vector3(controller.cam.transform.localEulerAngles.x, 0, 0);
         while ((Vector3.Distance(controller.cam.transform.position, orig_cam_position) > 0.0001f) || Vector3.Distance(controller.cam.transform.localEulerAngles, orig_cam_rotation) > 0.0001f) {
