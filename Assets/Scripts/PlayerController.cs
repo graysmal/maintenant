@@ -204,7 +204,6 @@ public class PlayerController : MonoBehaviour
         interval = Math.Clamp(interval, 0, 1);
         if (moving && grounded)
         {
-            Debug.Log(GameManager.time + "||" + next_interval);
             if (GameManager.time > next_interval)
             {
                 AudioSource.PlayClipAtPoint(GameManager.footsteps.ElementAt(footstep_iteration), this.transform.position - new Vector3(0, player_collider.bounds.extents.y + 0.1f, 0), 0.1f);

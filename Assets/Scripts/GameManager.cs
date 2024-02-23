@@ -54,6 +54,9 @@ public class GameManager : MonoBehaviour
     string eta;
     int seconds_remaining;
     int minutes_remaining;
+    float last_progress = 0;
+    float progress_iteration = 1;
+    float last_progress_time = 0;
     public float progress;
     public float progress_to_end;
 
@@ -84,15 +87,30 @@ public class GameManager : MonoBehaviour
             startRandomEvent();
 
         }
-        seconds_remaining = (int) ((progress_to_end - progress) / (rate * (servers.Count)));
-        if (seconds_remaining < 0)
+        try
         {
-            seconds_remaining = 0;
+            //Debug.Log("time: " + time + " | progress: " + progress + " | last progress: " + last_progress + " | sec: " + (int)(progress_to_end - progress) / (int)((progress - last_progress) / progress_iteration));
+            if (time > last_progress_time)
+            {
+                seconds_remaining = (int)(progress_to_end - progress) / (int)((progress - last_progress) / progress_iteration);
+                last_progress = progress;
+                last_progress_time += progress_iteration;
+                //seconds_remaining = (int) ((progress_to_end - progress) / (rate * (servers.Count)));
+                if (seconds_remaining < 0)
+                {
+                    seconds_remaining = 0;
+                }
+                minutes_remaining = seconds_remaining / 60;
+                seconds_remaining %= 60;
+                eta = "ETA: " + minutes_remaining + ":" + seconds_remaining.ToString("D2");
+                eta_text.text = eta;
+            }
         }
-        minutes_remaining = seconds_remaining / 60;
-        seconds_remaining %= 60;
-        eta = "ETA: " + minutes_remaining + ":" + seconds_remaining.ToString("D2");
-        eta_text.text = eta;
+        catch (Exception e) {
+            Debug.Log(e.StackTrace);
+        }
+        
+        
         progress_bar_fill.fillAmount = progress / progress_to_end;
 
         seconds = (int) time;
@@ -118,15 +136,16 @@ public class GameManager : MonoBehaviour
         }
         else {
             Server selected_server = getAvailableServer().GetComponent<Server>();
-
+            
             // off event weight out of 100
-            float off_w = 50;
+            float off_w = ((-15f / 300f) * time) + 50;
             // yellow event weight out of 100
-            float yel_w = ((-15f / 300f) * time) + 50;
+            float yel_w = 50;
             // red event weight out of 100
             float red_w = ((15f / 300f) * time);
             float chance_total = off_w + yel_w + red_w;
             float rand = UnityEngine.Random.Range(1, chance_total);
+            Debug.Log(off_w + " " + yel_w + " " + red_w);
             if (rand < off_w)
             {
                 selected_server.startEvent(0);
