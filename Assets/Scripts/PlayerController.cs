@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour
 
     public float stamina; // 100
     public float reach; //3
+    private int footstep_iteration = 0;
+    private float next_interval;
 
     // input
     float hor_inp;
@@ -44,11 +47,9 @@ public class PlayerController : MonoBehaviour
         set {
             if (_can_move == false && value == true)
             {
-                UI.SetActive(true);
                 rb.useGravity = true;
             }
             else if (_can_move == true && value == false) {
-                UI.SetActive(false);
                 rb.useGravity = false;
             }
             _can_move = value;
@@ -198,6 +199,27 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void playSounds() {
+        float interval = (float) Math.Pow(rb.velocity.magnitude, -1) * 2;
+        interval = Math.Clamp(interval, 0, 1);
+        if (moving && grounded)
+        {
+            Debug.Log(GameManager.time + "||" + next_interval);
+            if (GameManager.time > next_interval)
+            {
+                AudioSource.PlayClipAtPoint(GameManager.footsteps.ElementAt(footstep_iteration), this.transform.position - new Vector3(0, player_collider.bounds.extents.y + 0.1f, 0), 0.1f);
+                footstep_iteration++;
+                if (footstep_iteration >= GameManager.footsteps.Length)
+                {
+                    footstep_iteration = 0;
+                }
+                next_interval = GameManager.time + interval;
+            }
+        }
+        else {
+            next_interval = 0;
+        }
+    }
     IEnumerator crouch()
     {
         crouching = true;
@@ -233,7 +255,7 @@ public class PlayerController : MonoBehaviour
     void calculateMovement()
     {
         updatePlayerStates();
-
+        playSounds();
 
         // create flat movement vector with a magnitude of one based on player input
         Vector3 vector;

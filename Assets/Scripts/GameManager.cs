@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     public AudioClip switch_off;
     public AudioClip power_up;
     public AudioClip power_down;
+    static public AudioClip[] footsteps;
+    public AudioClip[] footsteps_accessible;
 
     public GameObject troll;
     public List<GameObject> servers = new List<GameObject>();
@@ -39,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> ongoing_event_servers = new List<GameObject>();
     public List<string> ips = new List<string>();
-    public float time = 0;
+    public static float time = 0;
     public float frequency; // seconds
     float next_time = 0;
 
@@ -58,6 +60,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        footsteps = footsteps_accessible;
         next_time = frequency;
         generateIPs(700);
         StartCoroutine(renderCam());

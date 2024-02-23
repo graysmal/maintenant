@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Troll.cs" />
     <Compile Include="Assets\Scripts\PlayerInteractions.cs" />
     <Compile Include="Assets\Scripts\Laptop.cs" />
     <Compile Include="Assets\Scripts\lightScript.cs" />
@@ -65,7 +66,6 @@
     <Compile Include="Assets\Scripts\ropeParent.cs" />
     <Compile Include="Assets\Scripts\Server.cs" />
     <Compile Include="Assets\Scripts\temptingObject.cs" />
-    <Compile Include="Assets\Scripts\Troll.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

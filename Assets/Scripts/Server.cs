@@ -185,16 +185,16 @@ public class Server : MonoBehaviour
     }
 
     IEnumerator blinkLight(Color color, float time) {
-        float starting_time = gameManager.time;
+        float starting_time = GameManager.time;
         status_light.color = color;
         while (event_ongoing) {
-            if (gameManager.time >= (starting_time + time))
+            if (GameManager.time >= (starting_time + time))
             {
                 disableServer();
                 yield break;
             }
             status_light.gameObject.SetActive(!status_light.gameObject.activeSelf);
-            yield return new WaitForSeconds((-0.8f / time)*((gameManager.time - starting_time)) + 1f);
+            yield return new WaitForSeconds((-0.8f / time)*((GameManager.time - starting_time)) + 1f);
         }
     }
 }

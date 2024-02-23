@@ -47,7 +47,7 @@ public class PlayerInteractions : MonoBehaviour
     IEnumerator inspectServer() {
         GameObject server = controller.lookingAt();
         Server serverScript = server.GetComponent<Server>();
-
+        
         // if server isn't ready to be interacted with again, cancel coroutine
         if (serverScript.still == false || serverScript.permanently_disabled == true)
         {
@@ -57,7 +57,7 @@ public class PlayerInteractions : MonoBehaviour
         else {
             server.GetComponent<Server>().still = false;
         }
-
+        controller.UI.transform.GetChild(0).gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
         controller.can_move = false;
         a_source.PlayOneShot(gameManager.pick_up_sfx);
@@ -83,6 +83,7 @@ public class PlayerInteractions : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         controller.can_move = true;
+        controller.UI.transform.GetChild(0).gameObject.SetActive(true);
         a_source.PlayOneShot(gameManager.put_down_sfx);
         inspecting_server = false;
 
@@ -118,6 +119,7 @@ public class PlayerInteractions : MonoBehaviour
         GameObject laptop = controller.lookingAt();
         Laptop laptop_script = laptop.transform.parent.GetComponent<Laptop>();
         Coroutine troll_corout = null;
+        controller.UI.SetActive(false);
 
         if (!lightScript.lights.ElementAt(0).is_enabled) {
             int random_float = Random.Range(0, 9);
@@ -143,6 +145,7 @@ public class PlayerInteractions : MonoBehaviour
         
         Cursor.lockState = CursorLockMode.Locked;
         controller.can_move = true;
+        controller.UI.SetActive(true);
         laptop.transform.parent.GetComponent<Animator>().Play("laptop_close");
         laptop_script.a_source.PlayOneShot(laptop_script.close);
         StopCoroutine(laptop_listen);

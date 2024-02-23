@@ -57,7 +57,7 @@ public class lightScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((gameManager.time - 300) > -1 && (gameManager.time - 300) < 1) {
+        if ((GameManager.time - 300) > -1 && (GameManager.time - 300) < 1) {
             is_enabled = false;
         }
     }
@@ -70,13 +70,13 @@ public class lightScript : MonoBehaviour
 
     IEnumerator flickerRandomly() {
         
-        float time_target = gameManager.time + Random.Range(1, 15);
+        float time_target = GameManager.time + Random.Range(1, 15);
         GameObject spot_light = this.transform.GetChild(1).GetChild(1).gameObject;
         float original_intensity = spot_light.GetComponent<Light>().intensity;
         while (true) {
             while (is_enabled)
             {
-                while (gameManager.time < time_target)
+                while (GameManager.time < time_target)
                 {
                     yield return null;
                 }
@@ -84,7 +84,7 @@ public class lightScript : MonoBehaviour
                 spot_light.GetComponent<Light>().intensity = original_intensity / (2 + Random.Range(-1, 1));
                 yield return new WaitForSeconds(0.1f);
                 spot_light.GetComponent<Light>().intensity = original_intensity + Random.Range(-2, 2);
-                time_target = gameManager.time + Random.Range(1, 15);
+                time_target = GameManager.time + Random.Range(1, 15);
                 yield return null;
             }
             yield return null;
