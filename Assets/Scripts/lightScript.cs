@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using static Unity.VisualScripting.Member;
 
 public class lightScript : MonoBehaviour
@@ -41,6 +42,8 @@ public class lightScript : MonoBehaviour
         }
     }
 
+    bool isTurningOff = false;
+
     public AudioClip hum_on_clip;
     public AudioClip hum_loop_clip;
     // Start is called before the first frame update
@@ -57,8 +60,11 @@ public class lightScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((GameManager.time - 300) > -1 && (GameManager.time - 300) < 1) {
+        if (!isTurningOff && (GameManager.time - 300) > -1 && (GameManager.time - 300) < 1) {
             is_enabled = false;
+            isTurningOff = true;
+            StartCoroutine(turnOffPeriodically());
+            
         }
     }
 
@@ -68,6 +74,26 @@ public class lightScript : MonoBehaviour
         }
     }
 
+    IEnumerator turnOffPeriodically() {
+        float time_target = GameManager.time + Random.Range(10, 30);
+        while (isTurningOff)
+        {
+            while (is_enabled)
+            {
+                while (GameManager.time < time_target)
+                {
+                    yield return null;
+                }
+                foreach (lightScript obj in lights) { 
+                    obj.is_enabled = false;
+                }
+                time_target = GameManager.time + Random.Range(10, 30);
+                yield return null;
+            }
+            time_target = GameManager.time + Random.Range(10, 30);
+            yield return null;
+        }
+    }
     IEnumerator flickerRandomly() {
         
         float time_target = GameManager.time + Random.Range(1, 15);

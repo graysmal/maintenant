@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using TMPro;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -77,10 +79,13 @@ public class GameManager : MonoBehaviour
         time += Time.deltaTime;
         AudioListener.volume = volume;
         Time.timeScale = time_scale;
-        if (frequency > 0.5f) {
-            frequency = (-(1f / 150f) * time) + 3f;
+        if (frequency > 1f) {
+            frequency = (-(1f / 75f) * time) + 5f;
         }
-        
+
+        if (progress >= progress_to_end) {
+            SceneManager.LoadScene(0);
+        }
 
         if (time > next_time) {
             next_time += frequency;
@@ -90,12 +95,21 @@ public class GameManager : MonoBehaviour
         try
         {
             //Debug.Log("time: " + time + " | progress: " + progress + " | last progress: " + last_progress + " | sec: " + (int)(progress_to_end - progress) / (int)((progress - last_progress) / progress_iteration));
+            seconds_remaining = (int)((progress_to_end - progress) / (rate * (servers.Count + ongoing_event_servers.Count)));
+            if (seconds_remaining < 0)
+            {
+                seconds_remaining = 0;
+            }
+            minutes_remaining = seconds_remaining / 60;
+            seconds_remaining %= 60;
+            eta = "ETA: " + minutes_remaining + ":" + seconds_remaining.ToString("D2");
+            eta_text.text = eta;
             if (time > last_progress_time)
             {
-                seconds_remaining = (int)(progress_to_end - progress) / (int)((progress - last_progress) / progress_iteration);
-                last_progress = progress;
+                //seconds_remaining = (int)(progress_to_end - progress) / (int)((progress - last_progress) / progress_iteration);
+                /*last_progress = progress;
                 last_progress_time += progress_iteration;
-                //seconds_remaining = (int) ((progress_to_end - progress) / (rate * (servers.Count)));
+                seconds_remaining = (int) ((progress_to_end - progress) / (rate * (servers.Count)));
                 if (seconds_remaining < 0)
                 {
                     seconds_remaining = 0;
@@ -103,11 +117,11 @@ public class GameManager : MonoBehaviour
                 minutes_remaining = seconds_remaining / 60;
                 seconds_remaining %= 60;
                 eta = "ETA: " + minutes_remaining + ":" + seconds_remaining.ToString("D2");
-                eta_text.text = eta;
+                eta_text.text = eta;*/
             }
         }
         catch (Exception e) {
-            Debug.Log(e.StackTrace);
+            //Debug.Log(e.StackTrace);
         }
         
         

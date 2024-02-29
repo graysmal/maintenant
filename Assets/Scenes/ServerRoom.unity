@@ -7980,7 +7980,7 @@ MonoBehaviour:
   time_scale: 1
   ongoing_event_servers: []
   ips: []
-  frequency: 3
+  frequency: 5
   yellow_event_time: 40
   red_event_time: 50
   rate: 0.0016233766
