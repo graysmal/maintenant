@@ -1,8 +1,8 @@
 # MainTenant
 
 ## ABOUT
-Francis Tuttle Technology Center Senior Cybersecurity Project.  
-The assignment was to make a game that exhibited cybersecurity principles or ideas in one month.  
+Francis Tuttle Computer Science Academy Senior Year Cybersecurity Project.  
+The assignment was to make a game in one month that exhibited cybersecurity principles or ideas.  
 
 MainTenant is a game where you try to survive five minutes in a server room where *everything* goes wrong.
 
