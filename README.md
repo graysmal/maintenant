@@ -1,6 +1,9 @@
 # MainTenant
 
+
 ## ABOUT
+<img width="250" alt="logo_on" src="https://github.com/graysmal/maintenant/assets/128539509/04d9eef2-a2e9-41a9-bb8e-a7811b9404d1">  
+  
 Francis Tuttle Computer Science Academy Senior Year Cybersecurity Project.  
 The assignment was to make a game in one month that exhibited cybersecurity principles or ideas.  
 
