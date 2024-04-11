@@ -9,6 +9,8 @@ The assignment was to make a game in one month that exhibited cybersecurity prin
 
 MainTenant is a game where you try to survive five minutes in a server room where *everything* goes wrong.
 
+All assets were custom-made.
+
 ## TRAILER
 TURN AUDIO ON  
 Track Name : Weval - Someday  
